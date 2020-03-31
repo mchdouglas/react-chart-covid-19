@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Paper from "@material-ui/core/Paper";
+import {
+  Chart,
+  BarSeries,
+  Title,
+  ArgumentAxis,
+  ValueAxis,
+  Tooltip
+} from "@devexpress/dx-react-chart-material-ui";
 
-function App() {
+import axios from "axios";
+
+import { EventTracker } from "@devexpress/dx-react-chart";
+
+export default function App() {
+  const [user, setUser] = useState([]);
+
+  const carregar = async () => {
+    try {
+      const { data: result } = await axios.get(
+        `https://api.apify.com/v2/key-value-stores/TyToNta7jGKkpszMZ/records/LATEST?disableRedirect=true`
+      );
+      console.log(result.infectedByRegion);
+      setUser(result.infectedByRegion);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  carregar();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Paper>
+      <Chart data={user}>
+        <ArgumentAxis />
+        <ValueAxis />
+
+        <BarSeries valueField="count" argumentField="state" />
+        <Title text="Casos de covid-19 no Brasil" />
+        <EventTracker />
+        <Tooltip />
+      </Chart>
+    </Paper>
   );
 }
-
-export default App;
