@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import {
   Chart,
@@ -14,7 +14,7 @@ import axios from "axios";
 import { EventTracker } from "@devexpress/dx-react-chart";
 
 export default function App() {
-  const [user, setUser] = useState([]);
+  const [casos, setCasos] = useState([]);
 
   const carregar = async () => {
     try {
@@ -22,16 +22,19 @@ export default function App() {
         `https://api.apify.com/v2/key-value-stores/TyToNta7jGKkpszMZ/records/LATEST?disableRedirect=true`
       );
 
-      setUser(result.infectedByRegion);
+      setCasos(result.infectedByRegion);
+      console.log(result.infectedByRegion);
     } catch (error) {
       console.log(error);
     }
   };
 
-  carregar();
+  useEffect(() => {
+    carregar();
+  }, []);
   return (
     <Paper>
-      <Chart data={user}>
+      <Chart data={casos}>
         <ArgumentAxis />
         <ValueAxis />
 
