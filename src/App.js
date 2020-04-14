@@ -19,7 +19,7 @@ export default function App() {
   const carregar = async () => {
     try {
       const { data: result } = await axios.get(
-        `https://api.apify.com/v2/key-value-stores/TyToNta7jGKkpszMZ/records/LATEST?disableRedirect=true`
+        ``
       );
 
       setCasos(result.infectedByRegion);
